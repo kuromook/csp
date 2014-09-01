@@ -7,8 +7,10 @@ sys.path.append(os.path.expanduser("~/code/py/csp/"))
 if os.name is 'posix':
     from copy_paste import pbpaste, pbcopy
     from convertCspText import convertCspText
+    from convertCspText import convertCspTextByMecab
+
     text = pbpaste()
-    text = convertCspText(text)
+    text = convertCspTextByMecab(text)
     pbcopy(text)
 else:
     print "error"
