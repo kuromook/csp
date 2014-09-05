@@ -6,12 +6,10 @@ sys.path.append(os.path.expanduser("~/code/py/csp/"))
 
 if os.name is 'posix':
     from copy_paste import pbpaste, pbcopy
-    from convertCspText import convertCspText
-    from convertCspText import splitLine
-    from convertCspText import convertCspTextByMecab
+    from convertCspText import splitPage
 
     text = pbpaste()
-    text = splitLine(text)
+    text = splitPage(text)
     pbcopy(text)
 else:
     print "error"
