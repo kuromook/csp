@@ -5,51 +5,8 @@
 on clip studio paint
 """
 
-""" old version ( not used )"""
-def convertCspText(string):
-    speakingSeparator = "\n\n"
-
-    isCarregeReturnPrevious = False
-    ary = []
-    speak = ""
-    speakCount = 0
-
-    pair = {
-        "think": {"pre": u"(", "suff": u")", "flag": False},
-        "speak": {"pre": u"「", "suff": u"」", "flag": False},
-        "monologue": {"pre": u"<", u"suff": ">", "flag": False}
-        }
-
-    for c in string:
-        for v in pair.values():
-            if (v["flag"] and c == v["suff"]):
-                v["flag"] = False
-                speak += "\n"
-                ary.append(speak)
-                speak = ""
-                speakCount = 0
-
-        if any([v["flag"] for v in pair.values()]):
-            if speakCount > 10 and (c == u"、" or c == u"\n"):
-                speak = speak + u"\n"
-                speakCount = 0
-            else:
-                speak = speak + c
-                speakCount += 1
-
-        for v in pair.values():
-            if c == v["pre"] and isCarregeReturnPrevious:
-                v["flag"] = True
-
-        if c == '\n':
-            isCarregeReturnPrevious = True
-        else:
-            isCarregeReturnPrevious = False
-
-    return speakingSeparator.join(ary)
-
 def splitPage(string):
-    ary = string.split('\np\n')
+    ary = string.split('\n\n\n')
     reary = []
     for v in ary:
         reary.append(splitLine(v))
@@ -82,17 +39,25 @@ def convertCspTextByMecab(string):
     pair = {
         "think": {"pre": "(", "suff": ")", "flag": 0},
         "speak": {"pre": "「", "suff": "」", "flag": 0},
-        "monologue": {"pre": "<", "suff": ">", "flag": 0}
+        "monologue": {"pre": "<", "suff": ">", "flag": 0},
+        "description": {"pre": "[", "suff": "]", "flag": 0}
         }
 
     while node:
         c = node.surface
         p = node.feature.split(',')[0]
 
-        for v in pair.values():
-            if c == v["suff"]:
+        for k, v in pair.items():
+            if c.endswith(v['suff']):
                 if v["flag"] == 1:
-                    v["flag"] = 0
+                    pair["think"]["flag"] = 0
+                    pair["speak"]["flag"] = 0
+                    pair["monologue"]["flag"] = 0
+                    pair["description"]["flag"] = 0
+
+                    speak += c.replace(v['suff'], '')
+                    if k is "description":
+                        speak = "`" + speak
                     speak += "\n"
                     ary.append(speak.decode('utf-8'))
                     speak = ""
@@ -111,8 +76,8 @@ def convertCspTextByMecab(string):
                 speak = speak + c
                 speakCount += node.length
 
-        for v in pair.values():
-            if c == v["pre"]:
+        for k, v in pair.items():
+            if c.startswith(v["pre"]):
                 v["flag"] += 1
 
 
