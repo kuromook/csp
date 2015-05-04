@@ -21,4 +21,6 @@ else:
 	root.withdraw()
 	text = root.clipboard_get()
 	text = splitLine(text, use_mecab=False)
+	print(text)
 	root.clipboard_append(text)
+	root.mainloop()

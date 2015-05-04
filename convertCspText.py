@@ -26,7 +26,33 @@ def splitLine(string, use_mecab=True):
 "then use old version "
 def convertCspText(string):
     speakingSeparator = "\n\n"
+
+    ary = []
+    speak = ""
+
+    pair = {
+        "think": {"pre": u"(", "suff": u")", "flag": False},
+        "speak": {"pre": u"「", "suff": u"」", "flag": False},
+        "monologue": {"pre": u"<", u"suff": ">", "flag": False}
+        }
+
+    for c in string:
+        for v in pair.values():
+            if (v["flag"] and c == v["suff"]):
+                v["flag"] = False
+                speak += "\n"
+                ary.append(speak)
+                speak = ""
+        
+        if(pair["think"]["flag"] or pair["speak"]["flag"] or pair["monologue"]["flag"]):
+            speak = speak + c
+
+        for v in pair.values():
+            if c == v["pre"]:
+                v["flag"] = True
+    print(ary)
     return speakingSeparator.join(ary)
+
 
 
 def convertCspTextByMecab(string):
