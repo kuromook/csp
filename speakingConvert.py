@@ -1,17 +1,24 @@
 #!/usr/bin/python
 # encoding: utf-8
 
-import sys, os
-sys.path.append(os.path.expanduser("~/code/py/csp/"))
+import  os
+import sys
+from convertCspText import splitLine
 
 if os.name is 'posix':
-    from copy_paste import pbpaste, pbcopy
-    from convertCspText import convertCspText
-    from convertCspText import splitLine
-    from convertCspText import convertCspTextByMecab
+	# for mac OS
+	sys.path.append(os.path.expanduser("~/code/py/csp/"))	
+	from copy_paste import pbpaste, pbcopy
 
-    text = pbpaste()
-    text = splitLine(text)
-    pbcopy(text)
+	text = pbpaste()
+	text = splitLine(text, use_mecab=True)
+	pbcopy(text)
 else:
-    print "error"
+	# fow windows
+	sys.path.append(os.path.expanduser("~/py/csp/"))
+	from tkinter import Tk
+	root = Tk()
+	root.withdraw()
+	text = root.clipboard_get()
+	text = splitLine(text, use_mecab=False)
+	root.clipboard_append(text)

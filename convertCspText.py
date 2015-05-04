@@ -5,25 +5,30 @@
 on clip studio paint
 """
 
-def splitPage(string):
+def splitPage(string, use_mecab=True):
     ary = string.split('\n\n\n')
-    reary = []
-    for v in ary:
-        reary.append(splitLine(v))
-
+    reary = [splitLine(v, use_mecab) for v in ary]
     return "\np\n".join(reary)
 
 
-def splitLine(string):
+def splitLine(string, use_mecab=True):
     ary = string.split('\n\n')
-    reary = []
-    for v in ary:
-        reary.append(convertCspTextByMecab(v))
+    if use_mecab:
+        func = convertCspTextByMecab
+    else:
+        func = convertCspText
+    reary = [func(v) for v in ary]
 
     return "\nl\n".join(reary)
 
 
-""" current version """
+"on windows, Mecab-Python does not work fine"
+"then use old version "
+def convertCspText(string):
+    speakingSeparator = "\n\n"
+    return speakingSeparator.join(ary)
+
+
 def convertCspTextByMecab(string):
     speakingSeparator = "\n\n"
 
