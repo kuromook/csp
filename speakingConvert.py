@@ -1,6 +1,5 @@
 #!/usr/bin/python
-# encoding: utf-8
-
+# -*- coding: utf-8 -*- 
 import  os
 import sys
 from convertCspText import splitLine
@@ -15,12 +14,15 @@ if os.name is 'posix':
 	pbcopy(text)
 else:
 	# fow windows
-	sys.path.append(os.path.expanduser("~/py/csp/"))
-	from tkinter import Tk
-	root = Tk()
-	root.withdraw()
-	text = root.clipboard_get()
+	sys.path.append(os.path.expanduser("~/../../py/csp/"))
+	import clipboard
+	text = clipboard.paste()
+	if not text:
+		# for in use emacs call-process-region, but not work 
+		import sys
+		import codecs
+		sys.stdin  = codecs.getreader('utf8')(sys.stdin)
+		text = sys.stdin.read()
+
 	text = splitLine(text, use_mecab=False)
-	print(text)
-	root.clipboard_append(text)
-	root.mainloop()
+	clipboard.copy(text)
