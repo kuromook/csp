@@ -12,13 +12,18 @@ def splitPage(string, use_mecab=True):
 
 
 def splitLine(string, use_mecab=True):
-    ary = string.split('\n\n')
+    import os
+    if os.name is 'posix':
+        sep = '\n\n'
+    else:
+        sep = '\r\n\r\n'
+    ary = string.split(sep)
+    
     if use_mecab:
         func = convertCspTextByMecab
     else:
         func = convertCspText
     reary = [func(v) for v in ary]
-
     return "\nl\n".join(reary)
 
 
@@ -50,7 +55,12 @@ def convertCspText(string):
         for v in pair.values():
             if c == v["pre"]:
                 v["flag"] = True
-    print(ary)
+    def split_str(s, n):
+        "split string by its length"
+        length = len(s)
+        return [s[i:i+n] for i in range(0, length, n)]
+
+    ary = ["\n".join(split_str(v,10)) for v in ary]
     return speakingSeparator.join(ary)
 
 
@@ -110,7 +120,6 @@ def convertCspTextByMecab(string):
         for k, v in pair.items():
             if c.startswith(v["pre"]):
                 v["flag"] += 1
-
 
         node = node.next
 

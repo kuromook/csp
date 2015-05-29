@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*- 
 import  os
 import sys
-from convertCspText import splitLine
+from convertCspText import splitLine,splitPage
 
 if os.name is 'posix':
 	# for mac OS
@@ -23,6 +23,6 @@ else:
 		import codecs
 		sys.stdin  = codecs.getreader('utf8')(sys.stdin)
 		text = sys.stdin.read()
-
 	text = splitLine(text, use_mecab=False)
+	#text = splitPage(text, use_mecab=False)
 	clipboard.copy(text)

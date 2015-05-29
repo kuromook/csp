@@ -316,12 +316,11 @@
 	"buffers":
 	[
 		{
-			"contents": "__pycache__/\n*.pyc",
+			"file": "convertCspText.py",
 			"settings":
 			{
-				"buffer_size": 18,
-				"line_ending": "Unix",
-				"name": "__pycache__/"
+				"buffer_size": 3209,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -401,6 +400,7 @@
 	],
 	"file_history":
 	[
+		"/Users/fujiwaratoyofumi/code/py/csp/.gitignore",
 		"/Users/fujiwaratoyofumi/code/py/my-python-modules/.gitignore",
 		"/Users/fujiwaratoyofumi/code/py/lineart/.gitignore",
 		"/Users/fujiwaratoyofumi/code/py/twitter_lists/mutuals.py",
@@ -527,8 +527,7 @@
 		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyCharacter.ahk",
 		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyDustpan.ahk",
 		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyOnomatopeia.ahk",
-		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyOnomatopeia.bak",
-		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint.ahk"
+		"/Users/fujiwaratoyofumi/code/Autohotkey/csp/csPaint_padkeyOnomatopeia.bak"
 	],
 	"find":
 	{
@@ -699,25 +698,26 @@
 			[
 				{
 					"buffer": 0,
+					"file": "convertCspText.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 18,
+						"buffer_size": 3209,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								18,
-								18
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"auto_name": "__pycache__/",
-							"is_xml": false,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
