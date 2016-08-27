@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 test*.py
 ginga.txt
+*.class
+*.sublime-workspace
+*.sublime-project
