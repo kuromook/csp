@@ -5,31 +5,31 @@
 on clip studio paint
 """
 
+row_separator_source = '\n\n\n'
+row_separator_converted = "\np\n"
+
+speak_separator_source_win = '\r\n\r\n'
+speak_separator_source_mac = '\n\n'
+speak_separator_converted = "\nl\n"
+
+
 def splitPage(string, use_mecab=True):
-    ary = string.split('\n\n\n')
+    ary = string.split(row_separator_source)
     reary = [splitLine(v, use_mecab) for v in ary]
-    return "\np\n".join(reary)
+    return row_separator_converted.join(reary)
 
 
 def splitLine(string, use_mecab=True):
     import os
-    if os.name is 'posix':
-        sep = '\n\n'
-    else:
-        sep = '\r\n\r\n'
+    sep = speak_separator_source_mac if os.name is 'posix' else speak_separator_source_win
     ary = string.split(sep)
-    
-    if use_mecab:
-        func = convertCspTextByMecab
-    else:
-        func = convertCspText
-    reary = [func(v) for v in ary]
-    return "\nl\n".join(reary)
+    reary = [convertCspText(v, use_mecab) for v in ary]
+    #func = convertCspTextByMecab if use_mecab else convertCspText
+    #reary = [func(v) for v in ary]
+    return speak_separator_converted.join(reary)
 
 
-"on windows, Mecab-Python does not work fine"
-"then use old version "
-def convertCspText(string):
+def convertCspText(string, use_mecab=True):
     speakingSeparator = "\n\n"
 
     ary = []
@@ -48,79 +48,50 @@ def convertCspText(string):
                 speak += "\n"
                 ary.append(speak)
                 speak = ""
-        
+
         if(pair["think"]["flag"] or pair["speak"]["flag"] or pair["monologue"]["flag"]):
             speak = speak + c
 
         for v in pair.values():
             if c == v["pre"]:
                 v["flag"] = True
+
     def split_str(s, n):
         "split string by its length"
         length = len(s)
         return [s[i:i+n] for i in range(0, length, n)]
 
-    ary = ["\n".join(split_str(v,10)) for v in ary]
-    return speakingSeparator.join(ary)
 
 
+    def split_str_mecab(string, n):
+        import MeCab
+        mecab = MeCab.Tagger("mecabrc")
+        mecab.parse('')  # これを追記！
 
-def convertCspTextByMecab(string):
-    speakingSeparator = "\n\n"
+        encoded = string
+        node = mecab.parseToNode(encoded)
+        speakCount = 0
+        speak = "" 
+        while node:
+            c = node.surface
+            p = node.feature.split(',')[0]
 
-    ary = []
-    speak = ""
-    speakCount = 0
-    
-    import MeCab
-    mecab = MeCab.Tagger("mecabrc")
-    encoded = string.encode('utf-8')
-    node = mecab.parseToNode(encoded)
-
-    pair = {
-        "think": {"pre": "(", "suff": ")", "flag": 0},
-        "speak": {"pre": "「", "suff": "」", "flag": 0},
-        "monologue": {"pre": "<", "suff": ">", "flag": 0},
-        "description": {"pre": "[", "suff": "]", "flag": 0}
-        }
-
-    while node:
-        c = node.surface
-        p = node.feature.split(',')[0]
-
-        for k, v in pair.items():
-            if c.endswith(v['suff']):
-                if v["flag"] == 1:
-                    pair["think"]["flag"] = 0
-                    pair["speak"]["flag"] = 0
-                    pair["monologue"]["flag"] = 0
-                    pair["description"]["flag"] = 0
-
-                    speak += c.replace(v['suff'], '')
-                    if k is "description":
-                        speak = "`" + speak
-                    speak += "\n"
-                    ary.append(speak.decode('utf-8'))
-                    speak = ""
-                    speakCount = 0
-                else:
-                    v["flag"] -= 1
-
-        if any([v["flag"] for v in pair.values()]):
-            if speakCount > 20 and (c == "、" or c == "\n"):
-                speak = speak + "\n"
-                speakCount = 0
-            elif speakCount > 30 and (p == '助詞'):
+            if speakCount > 24 and (p == '助詞'):
                 speak = speak + c + "\n"
-                speakCount = node.length
+                speakCount = 0
             else:
                 speak = speak + c
                 speakCount += node.length
 
-        for k, v in pair.items():
-            if c.startswith(v["pre"]):
-                v["flag"] += 1
+            node = node.next
 
-        node = node.next
+        #print(speak)
+        return speak + "\n"
+
+    if not use_mecab:
+        ary = ["\n".join(split_str(v, 10)) for v in ary]
+    else:
+        ary = [split_str_mecab(v, 10) for v in ary] 
 
     return speakingSeparator.join(ary)
+

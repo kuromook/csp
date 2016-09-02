@@ -1,17 +1,18 @@
 #!/usr/bin/python
 # encoding: utf-8
 
-import sys, os
+import sys
+import os
 sys.path.append(os.path.expanduser("~/code/py/csp/"))
 
-if os.name is 'posix':
+if os.name == 'posix':
     from copy_paste import pbpaste, pbcopy
-    from convertCspText import convertCspText
+    #from convertCspText import convertCspText
     from convertCspText import splitLine
-    from convertCspText import convertCspTextByMecab
+    #from convertCspText import convertCspTextByMecab
 
     text = pbpaste()
     text = splitLine(text)
     pbcopy(text)
 else:
-    print "error"
+    print(error)
