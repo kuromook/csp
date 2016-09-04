@@ -12,6 +12,7 @@ speak_separator_source_win = '\r\n\r\n'
 speak_separator_source_mac = '\n\n'
 speak_separator_converted = "\nl\n"
 
+speak_end_simbols = ["…","、", "！", "？", "♡", "♪"]
 
 def split_str_mecab(string, return_num=24):
     'split speak by mecab'
@@ -31,7 +32,7 @@ def split_str_mecab(string, return_num=24):
         if speakCount > return_num and (p == '助詞'):
             speak = speak + c + "\n"
             speakCount = 0
-        elif speakCount > return_num and (c == '…'):
+        elif speakCount > return_num and (c in speak_end_simbols):
             speak = speak + c + "\n"
             speakCount = 0
         else:
