@@ -24,3 +24,9 @@ macでのクリップボード処理用
   
 ###  speakingConvert.py / speakingConvertPage.py / speakingConvertScene.py
 それぞれページ単位、複数頁でのシーン単位、段単位で使用
+
+### autoSpeaking.ahk
+clip studio paint 上でセリフ入力を自動化するのに使用  
+テキストツールのショートカットは"t"キーに設定、自動入力の起動は win+F1に設定  
+(必要であれば、コードの該当箇所を書き換えて下さい)  
+使い方は動画参照
