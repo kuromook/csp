@@ -1,8 +1,7 @@
 # clip studio speak converter
 シナリオ用テキストから漫画のセリフに流し込んでいく形に変換かけるスクリプト  
-windows 用の mecab-python が今までうまく入らなかったので保留していたが、再開  
-mac の方で今確認とれてません  
-使用は自己責任で  
+要ahk,python(exe版を使う場合pythonのインストールは不要)  
+使用は自己責任で 
 
 ## convertCspText.py
 本体。「」や()等で囲われたセリフから「」（）記号を排除、長い文を複数の行に変換する  
